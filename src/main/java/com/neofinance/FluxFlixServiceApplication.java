@@ -39,5 +39,4 @@ public class FluxFlixServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(FluxFlixServiceApplication.class, args);
     }
-
 }

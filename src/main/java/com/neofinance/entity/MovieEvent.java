@@ -15,5 +15,4 @@ public class MovieEvent {
     private Movie movie;
     private Date date;
     private String user;
-
 }

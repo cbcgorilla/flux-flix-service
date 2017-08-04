@@ -26,7 +26,6 @@ public class SecurityConfiguration {
                     .authorizeExchange()
                     .anyExchange().hasRole("ADMIN").and()
                     .build();
-
         }
 
 

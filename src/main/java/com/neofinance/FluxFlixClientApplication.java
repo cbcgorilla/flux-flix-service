@@ -33,7 +33,7 @@ public class FluxFlixClientApplication {
                         .uri("")
                         .retrieve()
                         .bodyToFlux(Movie.class)
-                        .filter(movie -> movie.getName().equalsIgnoreCase("Reactive Mongos back to the World"))
+                        .filter(movie -> movie.getName().equalsIgnoreCase("小牛分期"))
                         .flatMap(movie ->
                                 client.get()
                                         .uri("/{id}/events", movie.getId())

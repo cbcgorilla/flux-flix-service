@@ -39,7 +39,7 @@ public class FluxFlixService {
     }
 
     private String randomUser() {
-        String[] users = "Michael, Dylon, Hyman, Bob, JavaFxExpert".split(",");
+        String[] users = "Michael, Bob, Bill, Buffet, JavaFxExpert".split(",");
         return users[new Random().nextInt(users.length)];
     }
 
@@ -57,7 +57,7 @@ public class FluxFlixService {
     }
 
     private String randomName() {
-        String[] names = "Flux Movie,Reactive Mongos back to the World,回到未来,电影,时尚,美丽,人生喜剧,小牛在线,重出江湖,小牛金服".split(",");
+        String[] names = "Flux Movie,Reactive Mongos back to the World,小牛分期,电影,时尚,美丽,人生喜剧,小牛普惠,重出江湖,小牛金服".split(",");
         return names[new Random().nextInt(names.length)];
     }
 

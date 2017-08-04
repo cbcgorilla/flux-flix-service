@@ -23,6 +23,7 @@ public class UserHandler {
                 .body(udr.findByUsername(request.pathVariable("username")), UserDetails.class);
     }
 
+
     public Mono<ServerResponse> current(ServerRequest request) {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
