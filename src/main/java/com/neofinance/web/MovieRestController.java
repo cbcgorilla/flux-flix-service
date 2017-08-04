@@ -62,5 +62,4 @@ public class MovieRestController {
         String[] genres = "恐怖,灾难,喜剧,悲剧,动作,战争,爱情,歌剧,纪录片".split(",");
         return genres[new Random().nextInt(genres.length)];
     }
-
 }
