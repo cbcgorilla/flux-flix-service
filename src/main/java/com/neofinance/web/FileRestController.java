@@ -23,7 +23,7 @@ public class FileRestController {
 
     @RequestMapping(value="/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<File> sseRenameFiles() {
-        return fileService.sseRenameFiles("E:\\大数据+人工智能\\Spark\\spark-summit-east-2017\\ppt",".pdf-ps",".pdf");
+        return fileService.sseRenameFiles("E:\\BaiduYunDownload\\Spark summit East 2017视频","-iteblog.mp4",".MP4");
     }
 
 }

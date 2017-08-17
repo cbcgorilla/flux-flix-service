@@ -32,7 +32,7 @@ public class FluxFlixServiceApplication {
     @Bean
     CommandLineRunner demo(FluxFlixService fluxflixService) {
         return args -> {
-            //fluxflixService.initdata(5000000).subscribe(System.out::println);
+            fluxflixService.initdata(500).subscribe(System.out::println);
         };
     }
 
