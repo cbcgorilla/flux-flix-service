@@ -28,4 +28,9 @@ class StudentController(val studentService: StudentService) {
     fun getStudentByName(@PathVariable name: String): Mono<Student> {
         return studentService.byName(name)
     }
+
+    @GetMapping("/age/{gt}to{lt}")
+    fun byAgeBetween(@PathVariable gt: Int, @PathVariable lt: Int): Flux<Student> {
+        return studentService.byAgeBetween(gt, lt)
+    }
 }
