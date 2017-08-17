@@ -13,8 +13,11 @@ open class KFluxFlixServiceApplication {
     open fun init(studentService: StudentService) = CommandLineRunner {
         studentService.initdata(100).subscribe({ println(it) })
     }
-}
 
-fun main(args: Array<String>) {
-    SpringApplication.run(KFluxFlixServiceApplication::class.java, *args)
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            SpringApplication.run(KFluxFlixServiceApplication::class.java, *args)
+        }
+    }
 }

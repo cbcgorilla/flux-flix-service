@@ -31,7 +31,7 @@ class StudentService(val studentRepository: StudentRepository) {
 
     fun all(milliSpeed: Long): Flux<Student> {
         val interval = Flux.interval(Duration.ofMillis(milliSpeed))
-        return Flux.zip<Long, Student>(interval, studentRepository.findAll()).map({ it.getT2() })
+        return Flux.zip<Long, Student>(interval, studentRepository.findAll()).map { it.getT2() }
     }
 
     fun count(): Mono<Long> {
