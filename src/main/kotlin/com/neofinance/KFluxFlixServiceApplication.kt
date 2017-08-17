@@ -11,7 +11,7 @@ open class KFluxFlixServiceApplication {
 
     @Bean
     open fun init(studentService: StudentService) = CommandLineRunner {
-        studentService.initdata(100).subscribe({ println(it) })
+        studentService.initdata(100).subscribe { println(it) }
     }
 
     companion object {

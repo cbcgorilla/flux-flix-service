@@ -9,9 +9,10 @@ import java.time.Duration
 import java.util.*
 import java.util.stream.Stream
 
-data class Student(val name: String, val age: Int, val scores: Array<Double>)
+data class Student(val name: String, val age: Int = 0, val scores: Array<Double>)
 
-interface ReactiveStudentRepository : ReactiveMongoRepository<Student, String> {
+
+interface ReactiveStudentRepository : ReactiveMongoRepository<Student, Long> {
     fun findByName(name: String): Mono<Student>
 
     @Query("{ 'age' : { \$gt: ?0, \$lt: ?1 } }")
@@ -23,8 +24,8 @@ interface ReactiveStudentRepository : ReactiveMongoRepository<Student, String> {
 class StudentService(val studentRepository: ReactiveStudentRepository) {
 
     private fun randomUser(): String {
-        val users = "Michael, Bob, Bill, Buffet, JavaFxExpert".split(",")
-        return users[Random().nextInt(users.size)]
+        var names = "Flux Movie,Reactive Mongos back to the World,小牛分期,电影,时尚, 美丽,人生喜剧,小牛普惠,重出江湖,小牛金服".split(",".toRegex())
+        return names[Random().nextInt(names.size)].trim()
     }
 
     fun initdata(limit: Long): Mono<Void> {
@@ -39,10 +40,10 @@ class StudentService(val studentRepository: ReactiveStudentRepository) {
         return Flux.zip<Long, Student>(interval, studentRepository.findAll()).map { it.getT2() }
     }
 
-    inline fun count(): Mono<Long> = studentRepository.count()
+    fun count() = studentRepository.count()
 
-    inline fun byName(name: String): Mono<Student> = studentRepository.findByName(name)
+    fun byName(name: String) = studentRepository.findByName(name)
 
-    inline fun byAgeBetween(ageGT: Int, ageLT: Int): Flux<Student> = studentRepository.findStudentByAgeBetween(ageGT, ageLT)
+    fun byAgeBetween(ageGT: Int, ageLT: Int) = studentRepository.findStudentByAgeBetween(ageGT, ageLT)
 
 }
