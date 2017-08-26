@@ -1,5 +1,5 @@
 package com.neofinance.security;
-
+/*
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,10 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
-@Component
+@Component*/
 public class UserHandler {
-    private final UserDetailsRepository udr;
+ /*   private final UserDetailsRepository udr;
 
     UserHandler(UserDetailsRepository udr) {
         this.udr = udr;
@@ -33,5 +32,5 @@ public class UserHandler {
                                 .cast(UserDetails.class),
                         UserDetails.class
                 );
-    }
+    }*/
 }

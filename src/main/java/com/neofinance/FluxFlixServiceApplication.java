@@ -1,11 +1,20 @@
 package com.neofinance;
 
 import com.neofinance.service.FluxFlixService;
+import com.neofinance.service.MongoFileService;
 import lombok.extern.java.Log;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @Log
 @SpringBootApplication
@@ -32,7 +41,27 @@ public class FluxFlixServiceApplication {
     @Bean
     CommandLineRunner demo(FluxFlixService fluxflixService) {
         return args -> {
-            fluxflixService.initdata(500).subscribe(System.out::println);
+            fluxflixService.initdata(50).subscribe(System.out::println);
+        };
+    }
+
+    @Bean
+    CommandLineRunner demo2(MongoFileService mongoFileService) {
+        return args -> {
+            File directory = new File("E:\\Download");
+            if (directory.exists() && directory.isDirectory()) {
+                Flux.just(directory.listFiles())
+                        .filter(file -> file.getName().toLowerCase().endsWith(".pdf"))
+                        .map(file -> {
+                                    try {
+                                        mongoFileService.storeFile(new FileInputStream(file), file.getName(), "PDF");
+                                    } catch (IOException exp) {
+                                        exp.printStackTrace();
+                                    }
+                                    return file;
+                                }
+                        ).subscribe();
+            }
         };
     }
 

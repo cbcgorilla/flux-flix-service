@@ -17,7 +17,7 @@ import java.util.Collections;
 @SpringBootApplication
 public class FluxFlixClientApplication {
 
-    @Bean
+    //@Bean
     WebClient webClient() {
         return WebClient.builder().filter(ExchangeFilterFunctions.basicAuthentication("chenwen", "password"))
                 .baseUrl("http://localhost:8080/movies").build();
@@ -25,7 +25,7 @@ public class FluxFlixClientApplication {
 
     }
 
-    @Bean
+    //@Bean
     CommandLineRunner demo(WebClient client) {
         return strings ->
                 client

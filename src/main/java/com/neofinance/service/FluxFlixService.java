@@ -29,7 +29,7 @@ public class FluxFlixService {
         return movieRepository.deleteAll().thenMany(
                 Flux.fromStream(
                         Stream.generate(() -> new Movie(UUID.randomUUID().toString(), randomName(), randomGenre())).limit(limit))
-                        .flatMap(m -> movieRepository.save(m))).then();
+                        .flatMap(movieRepository::save)).then();
     }
 
     public Flux<MovieEvent> streamStreams(Movie movie) {
