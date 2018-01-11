@@ -1,7 +1,7 @@
 package com.neofinance.web;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
-import com.neofinance.service.MongoFileService;
+import com.neofinance.service.MongoGridFsService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,22 +10,22 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/mongofiles")
-public class MongoFileRestController {
+public class GridFsRestController {
 
-    private final MongoFileService mongoFileService;
+    private final MongoGridFsService mongoGridFsService;
 
-    MongoFileRestController(MongoFileService mongoFileService) {
-        this.mongoFileService = mongoFileService;
+    GridFsRestController(MongoGridFsService mongoGridFsService) {
+        this.mongoGridFsService = mongoGridFsService;
     }
 
     @RequestMapping()
     public Flux<String> getFiles() {
-        return Flux.fromIterable(mongoFileService.filenameList()).map(s->{return "【"+s.toLowerCase()+"】,\n";});
+        return Flux.fromIterable(mongoGridFsService.filenameList()).map(s -> "【"+s+"】\n");
     }
 
     @RequestMapping("/{filename}")
     public Mono<GridFSFile> getFile(@PathVariable String filename) {
-        return Mono.just(mongoFileService.getFileDescription(filename));
+        return Mono.just(mongoGridFsService.getFileDescription(filename));
     }
 
 }

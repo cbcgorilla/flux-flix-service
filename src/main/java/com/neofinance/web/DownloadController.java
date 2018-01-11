@@ -1,6 +1,6 @@
 package com.neofinance.web;
 
-import com.neofinance.service.MongoFileService;
+import com.neofinance.service.MongoGridFsService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
@@ -21,51 +21,73 @@ import java.io.*;
 @RequestMapping("/download")
 public class DownloadController {
 
-    private static final String APPLICATION_PDF = "application/pdf";
+    private final MongoGridFsService mongoGridFsService;
 
-    private final MongoFileService mongoFileService;
-
-    DownloadController(MongoFileService mongoFileService) {
-        this.mongoFileService = mongoFileService;
+    DownloadController(MongoGridFsService mongoGridFsService) {
+        this.mongoGridFsService = mongoGridFsService;
     }
 
-    @RequestMapping(value = "/a/{filename:.+}", method = RequestMethod.GET, produces = APPLICATION_PDF)
+    @RequestMapping(value = "/servlet/{filename:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_PDF_VALUE)
     public @ResponseBody
     void downloadDocument(HttpServletResponse response, @PathVariable("filename") String filename) throws IOException {
-        GridFsResource fsResource = mongoFileService.getFileResource(filename);
+        GridFsResource fsResource = mongoGridFsService.getFileResource(filename);
         InputStream in = fsResource.getInputStream();
 
-        response.setContentType(APPLICATION_PDF);
+        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader("Content-Disposition", "attachment; filename=" + filename);
         response.setHeader("Content-Length", String.valueOf(fsResource.contentLength()));
         FileCopyUtils.copy(in, response.getOutputStream());
     }
 
-    @RequestMapping(value = "/b/{filename:.+}", method = RequestMethod.GET, produces = APPLICATION_PDF)
+    @RequestMapping(value = "/entity/{filename:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_PDF_VALUE)
     public @ResponseBody
     HttpEntity<byte[]> openDocumentInBrowser(@PathVariable("filename") String filename) throws IOException {
-        GridFsResource fsResource = mongoFileService.getFileResource(filename);
+        GridFsResource fsResource = mongoGridFsService.getFileResource(filename);
         InputStream in = fsResource.getInputStream();
         byte[] document = FileCopyUtils.copyToByteArray(in);
 
         HttpHeaders header = new HttpHeaders();
-        header.setContentType(new MediaType("application", "pdf"));
+        header.setContentType(new MediaType("application","pdf"));
         header.set("Content-Disposition", "inline; filename=" + filename);
         header.setContentLength(document.length);
 
         return new HttpEntity<byte[]>(document, header);
     }
-/*
-    @RequestMapping(value = "/c/{filename}", method = RequestMethod.GET, produces = APPLICATION_PDF)
+
+    /**
+     * 同名文件多并发请求时有冲突可能, 占用服务端本地缓存目录，需要定期清理Web服务器缓存目录
+     *
+     * @param response
+     * @param filename
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/resource/{filename:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_PDF_VALUE)
     public @ResponseBody
-    Resource downloadC(HttpServletResponse response, @PathVariable String filename) throws IOException {
-        GridFsResource fsResource = mongoFileService.getFileResource(filename);
+    Resource resourceDownload(HttpServletResponse response, @PathVariable("filename") String filename) throws IOException {
+        GridFsResource fsResource = mongoGridFsService.getFileResource(filename);
         InputStream in = fsResource.getInputStream();
 
-        response.setContentType(APPLICATION_PDF);
+        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader("Content-Disposition", "inline; filename=" + filename);
         response.setHeader("Content-Length", String.valueOf(fsResource.contentLength()));
-        return new FileSystemResource(in);
-    }*/
+        return new FileSystemResource(getTempResourceFile(in, "E:\\temp\\" + filename));
+    }
+
+    private File getTempResourceFile(InputStream in, String tempFilename) {
+        try {
+            File f = new File(tempFilename);
+            FileOutputStream out = new FileOutputStream(f);
+            byte buf[] = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0)
+                out.write(buf, 0, len);
+            out.close();
+            in.close();
+            return f;
+        } catch (IOException e) {
+            return null;
+        }
+    }
 
 }

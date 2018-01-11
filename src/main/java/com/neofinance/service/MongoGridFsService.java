@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class MongoFileService {
+public class MongoGridFsService {
 
     private final GridFsTemplate gridFsTemplate;
 
     @Autowired
-    public MongoFileService(GridFsTemplate gridFsTemplate) {
+    public MongoGridFsService(GridFsTemplate gridFsTemplate) {
         this.gridFsTemplate = gridFsTemplate;
     }
 

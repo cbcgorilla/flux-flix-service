@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -41,6 +43,27 @@ public class FluxFlixClientApplication {
                                         .bodyToFlux(MovieEvent.class))
                         .subscribe(movieEvent -> log.info(movieEvent.toString()));
     }
+/*
+    @Bean
+    CommandLineRunner demo(WebClient client) {
+        return strings -> {
+           // FsDirectory parent = new FsDirectory(1504587637875967673L,"",0L,null);
+            //FsOwner[] owners = new FsOwner[1];
+            //owners[0] = new FsOwner("admin",FsOwner.Type.TYPE_PRIVATE,1);
+            LinkedMultiValueMap map = new LinkedMultiValueMap();
+
+            map.add("path", "posted directory");
+            map.add("parent", "parent");
+            client.post()
+                    .uri("/addDirectory")
+                    .body(BodyInserters.fromMultipartData(map)).retrieve()
+                    .bodyToMono(String.class)
+                    .subscribe(response ->
+                            System.out.println(
+                                    response));
+        };
+
+    }*/
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(FluxFlixClientApplication.class)
