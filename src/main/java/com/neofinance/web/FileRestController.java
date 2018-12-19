@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/file")
@@ -17,8 +20,8 @@ public class FileRestController {
     FileRestController(FileService fileService){this.fileService = fileService;}
 
     @RequestMapping()
-    public Flux<File> renameFiles() {
-        return fileService.renameFiles("F:\\Spark\\spark-summit-east-2017\\ppt","-iteblog.pdf",".pdf");
+    public List<File> renameFiles() {
+        return fileService.renameFiles("E:\\大数据+人工智能\\Spark\\spark-summit-east-2017\\ppt","Spark-Summi.pdf",".pdf").toStream().collect(Collectors.toList());
     }
 
     @RequestMapping(value="/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

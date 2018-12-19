@@ -1,15 +1,10 @@
 package com.neofinance;
 
 
-import com.neofinance.entity.Movie;
-import com.neofinance.entity.MovieEvent;
 import lombok.extern.java.Log;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,16 +14,16 @@ import java.util.Collections;
 @SpringBootApplication
 public class FluxFlixClientApplication {
 
-    //@Bean
+    @Bean
     WebClient webClient() {
-        return WebClient.builder().filter(ExchangeFilterFunctions.basicAuthentication("chenwen", "password"))
-                .baseUrl("http://localhost:8080/movies").build();
+        return WebClient.builder().filter(ExchangeFilterFunctions.basicAuthentication("admin", "chenbichao"))
+                .baseUrl("http://localhost:8080/api/user").build();
         // return WebClient.create("http://localhost:8080/movies");
 
     }
 
     //@Bean
-    CommandLineRunner demo(WebClient client) {
+    /*CommandLineRunner demo(WebClient client) {
         return strings ->
                 client
                         .get()
@@ -42,28 +37,31 @@ public class FluxFlixClientApplication {
                                         .retrieve()
                                         .bodyToFlux(MovieEvent.class))
                         .subscribe(movieEvent -> log.info(movieEvent.toString()));
-    }
+    }*/
 /*
     @Bean
     CommandLineRunner demo(WebClient client) {
         return strings -> {
-           // FsDirectory parent = new FsDirectory(1504587637875967673L,"",0L,null);
+            // FsDirectory parent = new FsDirectory(1504587637875967673L,"",0L,null);
             //FsOwner[] owners = new FsOwner[1];
             //owners[0] = new FsOwner("admin",FsOwner.Type.TYPE_PRIVATE,1);
-            LinkedMultiValueMap map = new LinkedMultiValueMap();
 
-            map.add("path", "posted directory");
-            map.add("parent", "parent");
             client.post()
-                    .uri("/addDirectory")
-                    .body(BodyInserters.fromMultipartData(map)).retrieve()
+                    .uri("/save")
+                    .body(BodyInserters.fromObject(
+                            new WebUser("", "xn042678",
+                                    "坏人", "经理", "11",
+                                    new HashSet<String>() {{
+                                        add("administrators");
+                                        add("users");
+                                    }},
+                                    "chenbichao@xiaoniu.com"))).retrieve()
                     .bodyToMono(String.class)
-                    .subscribe(response ->
-                            System.out.println(
-                                    response));
+                    .subscribe(System.out::println);
         };
 
-    }*/
+    }
+*/
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(FluxFlixClientApplication.class)
